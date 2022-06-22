@@ -4,44 +4,8 @@ const { Builder, By, Key } = require("selenium-webdriver");
 //Key - keyboard functionality
 const assert = require("assert"); //for our actual test - assertions
 
-describe("check the seacrh functionality in google", function () {
-  this.timeout(30000);
-
-  let driver; //declaring a driver variable
-
-  //setting up our browser to be ready for testing - before each test
-  beforeEach(async () => {
-    driver = await new Builder().forBrowser("chrome").build();
-  });
-
-  //terminating the browser after each test
-  afterEach(async () => {
-    await driver.quit();
-  });
-
-  //tests
-  it("Go to google and search for QA", async () => {
-    driver.get("http://www.google.co.uk"); // navigate to the url declared
-    driver.findElement(By.id("L2AGLb")).click(); // accept the agreement
-    await driver.findElement(By.name("q")).sendKeys("QA", Key.ENTER); //type QA and press ENTER
-    const val = await driver.wait(driver.getTitle(), 1000); // get the title of the webpage and store it into val
-
-    assert.equal(val, "QA - Google Search"); // to check if the value we got is equal to what we expected!
-  });
-
-  //tests
-  it("Go to google and search for BMW", async () => {
-    driver.get("http://www.google.co.uk");
-    driver.findElement(By.id("L2AGLb")).click();
-    await driver.findElement(By.name("q")).sendKeys("BMW", Key.ENTER);
-    const val = await driver.wait(driver.getTitle(), 1000);
-
-    assert.equal(val, "BMW - Google Search");
-  });
-});
-
-describe("Testing Bing", function () {
-  this.timeout(10000);
+describe("Testing automation website", function () {
+  this.timeout(100000);
 
   let driver;
 
@@ -52,62 +16,67 @@ describe("Testing Bing", function () {
   });
 
   // Closes the driver after each test
-  // afterEach(async function () {
-  //   driver.close();
-  // });
+  afterEach(async function () {
+    driver.close();
+  });
 
-  it("Should search for Doughnut and print this to the screen", async function () {
+  it("open automation website and click on t-shirts", async function () {
     // Arrange
-    // Tells driver to go to Bing.com website
-    driver.get("https://www.bing.com");
+    // Tells driver to go to automation website
+    driver.get("http://automationpractice.com/index.php");
 
-    let searchBar; // <- Element to enter search string into
+    let searchTshirt; // <- Element to enter search string into
     let searchElement; // <-- The element we're looking for on the search page
     let searchText; // <-- The string of what we searched for
 
     // Act
     // Finding the search bar by id
-    searchBar = driver.findElement(By.id("sb_form_q"));
+    searchTshirt = await driver.findElement(By.xpath
+      ("/html/body/div/div[1]/header/div[3]/div/div/div[6]/ul/li[3]/a"))
+      .click();
 
-    // Selecting the search bar and sending the string 'Doughnut' then pressing 'return'
-    await searchBar.sendKeys("Doughnut", Key.RETURN);
+    let tshirtText = await
+      (await driver.findElement
+        (By.xpath("/html/body/div/div[2]/div/div[3]/div[2]/h1/span[1]"))).getText()
+        .then(function (value) {
+          return value
+        });
 
-    // Using await to wait until our driver resolves the promise (page loads fully)
-    // Finding an element by xpath to use
-    searchElement = await driver.findElement(
-      By.xpath(
-        "/html/body/div[2]/main/div[2]/div/div/div/div/div/div/a[1]/div[2]/span[1]"
-      )
-    );
+    //assert.equal(tshirtText, "T-SHIRTS ");
 
-    // getText() returns a promise so using await to wait until it is resolved, saving the string value of the element
-    searchText = await searchElement.getText();
+    clickTshirt = await driver.findElement
+      (By.xpath("/html/body/div/div[2]/div/div[3]/div[2]/ul/li/div/div[1]/div/a[1]/img"))
+      .click();
 
-    // Assert
-    // Checking the value of the string
-    assert.equal(searchText, "Doughnut");
-  });
+    let chosenShirt = await
+      (await driver.findElement(By.xpath("/html/body/div/div[2]/div/div[3]/div/div/div/div[3]/h1"))).getText()
+        .then(function (value) {
+          return value
+        });
 
-  it("should contain a header saying NEWS", async function () {
-    // Arrange
+    assert.equal(chosenShirt, "Faded Short Sleeve T-shirts");
 
-    // Going to the BBC page
-    driver.get("https://www.bbc.co.uk/");
+    addToCart = await
+      (await driver.findElement
+        (By.xpath("/html/body/div/div[2]/div/div[3]/div/div/div/div[4]/form/div/div[3]/div/p/button"))).click();
 
-    // Declaring my variables before accessing them
-    let headerElement;
-    let headerText;
+    popUp = await
+      (await driver.findElement
+        (By.xpath
+          ("/html/body/div/div[1]/header/div[3]/div/div/div[4]/div[1]/div[2]/div[4]/a/span")))
+          .click();
 
-    // Act
-    // Finding the element I am interested in
-    headerElement = await driver.findElement(
-      By.xpath("/html/body/div/div/header/div[3]/div/div/div/div/div")
-    );
+    addedToCart = await
+    (await driver.findElement
+      (By.xpath
+        ("/html/body/div/div[2]/div/div[3]/div/div[2]/table/tbody/tr/td[2]/p/a")))
+        .getText()
+        .then (function (value) {
+          return value
+        });
+       
 
-    // Saving the getText() value of the element
-    headerText = await headerElement.getText();
-
-    // Assert
-    assert.equal(headerText, "Welcome to the BBC");
+    assert.equal(addedToCart, "Faded Short Sleeve T-shirts");
   });
 });
+

@@ -1,7 +1,6 @@
 {
   "name": "tdp-selenium",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "mocha testGoogle.spec.js"
@@ -9,8 +8,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chai": "^4.3.6",
     "chromedriver": "^102.0.0",
     "mocha": "^10.0.0",
     "selenium-webdriver": "^4.2.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leejenkinson/TDP-Selenium-day-2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/leejenkinson/TDP-Selenium-day-2/issues"
+  },
+  "homepage": "https://github.com/leejenkinson/TDP-Selenium-day-2#readme",
+  "description": ""
 }
